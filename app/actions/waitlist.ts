@@ -3,22 +3,22 @@
 import { createClient } from "@supabase/supabase-js"
 import { revalidatePath } from "next/cache"
 
-// Debug environment variables
-console.log("DEBUG: NEXT_PUBLIC_SUPABASE_URL =", process.env.NEXT_PUBLIC_SUPABASE_URL)
-console.log("DEBUG: SUPABASE_SERVICE_ROLE_KEY =", process.env.SUPABASE_SERVICE_ROLE_KEY)
-
 // Create a single supabase client for the server
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-export async function addToWaitlist(email: string) {
+export async function addToWaitlist(email: string, source: string) {
   try {
     // Validate email format
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return { success: false, error: "Please enter a valid email address" }
     }
+    // Validate source selection
+    if (!source) {
+      return { success: false, error: "Please select where you heard about OpenBook" }
+    }
 
     // Insert email into waitlist table
-    const { data, error } = await supabase.from("waitlist").insert([{ email }])
+    const { data, error } = await supabase.from("waitlist").insert([{ email, source }])
 
     if (error) {
       console.error("Error adding to waitlist:", error)

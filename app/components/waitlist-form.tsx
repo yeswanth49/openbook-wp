@@ -6,6 +6,13 @@ import { useState } from "react"
 import { CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
 import { addToWaitlist } from "../actions/waitlist"
 import WaitlistCounter from "./waitlist-counter"
 
@@ -14,14 +21,19 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState("")
+  const [source, setSource] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    if (!source) {
+      setError("Please select where you heard about OpenBook")
+      return
+    }
     setIsSubmitting(true)
 
     try {
-      const result = await addToWaitlist(email)
+      const result = await addToWaitlist(email, source)
 
       if (result.success) {
         setIsSubmitted(true)
@@ -50,6 +62,23 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
               aria-label="Email address"
             />
             {error && <p className="text-red-500 text-sm">{error}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Select
+              value={source}
+              onValueChange={(value) => setSource(value)}
+            >
+              <SelectTrigger className="w-full h-12 border-gray-200 focus:border-black focus:ring-black transition-all duration-300">
+                <SelectValue placeholder="Where did you hear about OpenBook" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="X">X</SelectItem>
+                <SelectItem value="Founders">Founders</SelectItem>
+                <SelectItem value="Referals">Referals</SelectItem>
+                <SelectItem value="Others">Others</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <Button

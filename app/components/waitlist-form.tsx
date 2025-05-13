@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, Send, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -22,6 +22,7 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState("")
   const [source, setSource] = useState("")
+  const [focus, setFocus] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,17 +52,35 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
   return (
     <div className="w-full space-y-6">
       {!isSubmitted ? (
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <form onSubmit={handleSubmit} className="w-full space-y-5">
           <div className="space-y-2">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full h-12 border-gray-200 focus:border-black focus:ring-black transition-all duration-300"
-              aria-label="Email address"
-            />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <div className="relative">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocus('email')}
+                onBlur={() => setFocus(null)}
+                className={`w-full h-12 transition-all duration-300 bg-white text-black placeholder-gray-500
+                  ${focus === 'email' 
+                    ? 'border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-y-[-2px]' 
+                    : 'border border-gray-300 shadow-sm'}`}
+                aria-label="Email address"
+              />
+              {email && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black">
+                  <span className="text-xs">{email.split('@')[1] ? '✓' : ''}</span>
+                </div>
+              )}
+            </div>
+
+            {error && (
+              <div className="flex items-center space-x-1 text-black">
+                <AlertCircle className="h-4 w-4" />
+                <p className="text-sm">{error}</p>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -69,21 +88,30 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
               value={source}
               onValueChange={(value) => setSource(value)}
             >
-              <SelectTrigger className="w-full h-12 border-gray-200 focus:border-black focus:ring-black transition-all duration-300">
+              <SelectTrigger 
+                className={`w-full h-12 transition-all duration-300 bg-white text-black
+                  ${focus === 'source' 
+                    ? 'border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-y-[-2px]' 
+                    : 'border border-gray-300 shadow-sm hover:border-gray-500'}`}
+                onFocus={() => setFocus('source')}
+                onBlur={() => setFocus(null)}
+              >
                 <SelectValue placeholder="Where did you hear about OpenBook" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="X">X</SelectItem>
-                <SelectItem value="Founders">Founders</SelectItem>
-                <SelectItem value="Referals">Referals</SelectItem>
-                <SelectItem value="Others">Others</SelectItem>
+              <SelectContent className="border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <SelectItem value="X" className="hover:bg-gray-100 focus:bg-gray-100">X</SelectItem>
+                <SelectItem value="Founders" className="hover:bg-gray-100 focus:bg-gray-100">Founders</SelectItem>
+                <SelectItem value="Referals" className="hover:bg-gray-100 focus:bg-gray-100">Referals</SelectItem>
+                <SelectItem value="Others" className="hover:bg-gray-100 focus:bg-gray-100">Others</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <Button
             type="submit"
-            className="w-full h-12 bg-black hover:bg-gray-800 text-white transition-all duration-300 transform hover:translate-y-[-2px]"
+            className="w-full h-12 bg-black hover:bg-black text-white transition-all duration-300 border-2 border-black
+              shadow-[6px_6px_0px_0px_rgba(0,0,0,0.8)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.8)] 
+              hover:translate-x-1 hover:translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -104,7 +132,10 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
                 Processing...
               </span>
             ) : (
-              "Join the Waitlist"
+              <span className="flex items-center justify-center">
+                Join the Waitlist
+                <Send className="ml-2 h-4 w-4" />
+              </span>
             )}
           </Button>
 
@@ -113,8 +144,26 @@ export default function WaitlistForm({ initialCount }: { initialCount: number })
           </div>
         </form>
       ) : (
-        <div className="w-full flex flex-col items-center space-y-4 animate-fadeIn">
-          <CheckCircle className="w-12 h-12 text-black" />
+        <div className="w-full flex flex-col items-center space-y-5 animate-fadeIn">
+          <div className="relative w-16 h-16">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="black" strokeWidth="3" />
+              <path 
+                d="M30 50 L45 65 L70 35" 
+                fill="none" 
+                stroke="black" 
+                strokeWidth="5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                className="animate-draw"
+                style={{
+                  strokeDasharray: 100,
+                  strokeDashoffset: 0,
+                  animation: "drawCheck 1s ease-in-out"
+                }}
+              />
+            </svg>
+          </div>
           <p className="text-center font-medium">Thank you for joining our waitlist! We'll be in touch soon.</p>
           <WaitlistCounter initialCount={initialCount} />
         </div>

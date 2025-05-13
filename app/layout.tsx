@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
 import './globals.css'
 
-const baseUrl = process.env.VERCEL_URL 
-  ? `https://${process.env.VERCEL_URL}` 
-  : 'http://localhost:3000'
+// Use a fixed production URL when in production to ensure correct OpenGraph image URLs
+const productionUrl = 'https://waitlist.goopenbook.in'
+const baseUrl = process.env.NODE_ENV === 'production'
+  ? productionUrl
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'http://localhost:3000'
 
 export const metadata: Metadata = {
   title: 'OpenBook',

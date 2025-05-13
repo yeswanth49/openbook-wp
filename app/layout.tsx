@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from "@vercel/analytics/next"
 import './globals.css'
 
 // Use a fixed production URL when in production to ensure correct OpenGraph image URLs
@@ -63,7 +64,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
-      <body>{children}</body>
+      <body>{children}
+      <Analytics/>
+      </body>
     </html>
   )
 }

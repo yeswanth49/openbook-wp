@@ -43,7 +43,7 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     screenshots: [
       {
-        src: "/385_1x_shots_so.png",
+        src: "/openbook_opengraph.png",
         type: "image/png",
         sizes: "1200x630",
       }

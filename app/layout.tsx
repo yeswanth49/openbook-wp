@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: 'Join the Waitlist for Early Access to OpenBook. Be the first to explore AI-powered, multilingual learning.',
     images: [
       {
-        url: `${baseUrl}/385_1x_shots_so.png`,
+        url: '/openbook_opengraph.png',
         width: 1200,
         height: 630,
         alt: 'OpenBook Waitlist',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'OpenBook Waitlist',
     description: 'Join the Waitlist for Early Access to OpenBook. Be the first to explore AI-powered, multilingual learning.',
-    images: [`${baseUrl}/385_1x_shots_so.png`],
+    images: ['/openbook_opengraph.png'],
   },
 }
 
@@ -58,8 +58,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
-        <meta property="og:image" content={`${baseUrl}/385_1x_shots_so.png`} />
-        <meta name="twitter:image" content={`${baseUrl}/385_1x_shots_so.png`} />
+        <meta property="og:image" content={`${baseUrl}/openbook_opengraph.png`} />
+        <meta name="twitter:image" content={`${baseUrl}/openbook_opengraph.png`} />
       </head>
       <body>{children}</body>
     </html>

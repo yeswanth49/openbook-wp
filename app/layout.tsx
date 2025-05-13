@@ -58,8 +58,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
-        <meta property="og:image" content={`${baseUrl}/openbook_opengraph.png`} />
-        <meta name="twitter:image" content={`${baseUrl}/openbook_opengraph.png`} />
       </head>
       <body>{children}</body>
     </html>
